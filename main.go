@@ -9,10 +9,21 @@ import (
 var _map = make(map[int][8]string)
 var lines = [8]string{}
 
+func Printing(arg string) {
+	for _, val := range arg {
+		for i := 0 ; i < 8 ; i++{
+			lines[i] += _map[int(val)][i] 
+		}
+	}
+	for i := 0; i < 8; i++ {
+		F.Println(lines[i])
+	}
+}
+
 func InitMap() {
 	file, err := os.Open("standard.txt")
 	if err != nil {
-		F.Println("Err: opening file:", err)
+		F.Println("Err: opening file:", err.Error())
 		return
 	}
 	
@@ -27,23 +38,14 @@ func InitMap() {
 
 func InsertValue(scanner *bufio.Scanner) [8]string {
 	ArtValue := [8]string{}
+	
 	for cp := 0; cp < 8 && scanner.Scan(); cp++ {
-		ArtValue[cp] = scanner.Text() + "\n"
+		ArtValue[cp] = scanner.Text() + " "
 	}
 	scanner.Scan()
 	return ArtValue
 }
 
-func Printing(arg string) {
-
-	for _, val := range arg {
-		for i := 0 ; i < 8 ; i++{
-			lines[i] += _map[int(val)]
-		}
-		// F.Println("Key:", string(val), "| Value:", _map[int(val)])
-	}
-		F.Println(lines)
-}
 
 func main() {
 	args := os.Args[1:]
@@ -53,12 +55,6 @@ func main() {
 	}
 
 	if len(args) != 1 {
-		return
-	}
-
-	_, err := os.Stat("standard.txt")
-	if err != nil {
-		F.Println(err.Error())
 		return
 	}
 
