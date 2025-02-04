@@ -6,69 +6,62 @@ import (
 	"os"
 )
 
+var _map = make(map[int][8]string)
+var lines = [8]string{}
 
-var _map = make(map[string]int)
-var lines [8]string
-
-
-func InitMap(){
-	_map["H"] = 1
-	_map["e"] = 10
-	_map["l"] = 20
-	_map["o"] = 30
-}
-
-func Printing(){
-	for _, val := range(lines){
-		F.Println(val)
-	}
-}
-
-func ReadChar(elm rune) [8]string{
-	line ,cp := 0, 0
-	file, err := os.Open("Banner.txt")
-	if err != nil{
-		return [8]string{err.Error()}
-	}
-	defer file.Close()
-	
-
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan(){
-		if _map[string(elm)] != line{
-			line++
-			continue
-		}
-		break
-	}
-	if _map[string(elm)] == line {
-		for scanner.Scan() && cp < 8 {
-			lines[cp] += scanner.Text()	+ " "	
-			cp++
-		}
-	}	
-	return lines
-}
-
-func main(){
-	args:= os.Args[1:]
-	if len(args) == 0{
-		F.Println("Err: Not Enough Prameters !")
-		return 
-	}
-	if len(args) != 1{
+func InitMap() {
+	file, err := os.Open("standard.txt")
+	if err != nil {
+		F.Println("Err: opening file:", err)
 		return
 	}
-	if args[0] == "" { return }
-	if args[0] == "\n" { return }
 	
-	InitMap()
+	scanner := bufio.NewScanner(file)
 	
-	for _, val := range(args[0]){
-		ReadChar( val)
+	for i := 32; i < 127; i++ {
+		_map[i] = InsertValue(scanner)
 	}
-	
-	Printing()
 
+	defer file.Close()
+}
+
+func InsertValue(scanner *bufio.Scanner) [8]string {
+	ArtValue := [8]string{}
+	for cp := 0; cp < 8 && scanner.Scan(); cp++ {
+		ArtValue[cp] = scanner.Text() + "\n"
+	}
+	scanner.Scan()
+	return ArtValue
+}
+
+func Printing(arg string) {
+
+	for _, val := range arg {
+		for i := 0 ; i < 8 ; i++{
+			lines[i] += _map[int(val)]
+		}
+		// F.Println("Key:", string(val), "| Value:", _map[int(val)])
+	}
+		F.Println(lines)
+}
+
+func main() {
+	args := os.Args[1:]
+	if len(args) == 0 {
+		F.Println("Err: Not Enough Parameters!")
+		return
+	}
+
+	if len(args) != 1 {
+		return
+	}
+
+	_, err := os.Stat("standard.txt")
+	if err != nil {
+		F.Println(err.Error())
+		return
+	}
+
+	InitMap()
+	Printing(args[0])
 }
