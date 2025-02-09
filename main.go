@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	F "fmt"
-	"os"
 	S "strings"
+	"os"
 )
 
 var _map = make(map[int][8]string)
@@ -14,7 +14,7 @@ var lines = [8]string{}
 func InitMap() {
 	file, err := os.Open("standard.txt")
 	if err != nil {
-		os.Stderr.WriteString("Err: opening file:" + err.Error())
+		os.Stderr.WriteString("Err: opening file: " + err.Error())
 		return
 	}
 	
@@ -31,7 +31,7 @@ func InsertValue(scanner *bufio.Scanner) [8]string {
 	ArtValue := [8]string{}
 	
 	for cp := 0; cp < 8 && scanner.Scan() ; cp++ {
-		ArtValue[cp] = scanner.Text() + " "
+		ArtValue[cp] = scanner.Text() 
 	}
 	scanner.Scan()
 	return ArtValue
@@ -42,13 +42,9 @@ func InsertValue(scanner *bufio.Scanner) [8]string {
 func Printing(arg string) {
 
 	if arg == "\\n" { F.Println() ; return }
-	
-	args:= S.Split(arg, "\\n")
-	for _,V := range (args){
-		if V == ""{
-			F.Println()
-			continue
-		}
+
+	for _,V := range S.Split(arg, "\\n"){
+		if V == ""{ F.Println(); continue}
 				
 		for _, val := range V {
 			for i := 0 ; i < 8 ; i++{
