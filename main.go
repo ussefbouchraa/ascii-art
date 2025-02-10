@@ -30,14 +30,6 @@ func InitMap() {
 }
 
 
-func isOnly(arg []string) bool {
-	for _,val := range arg{
-		if string(val) != "" {
-			return false
-		}
-	}
-	return true 
-}
 func Printing(arg string) {
 	if arg == "\\n" {
 		F.Println()
@@ -45,11 +37,10 @@ func Printing(arg string) {
 	}
 
 args:=  S.Split(arg, "\\n")
-	
-if isOnly(args) && len(args) > 1{
-		for i:= 0 ;i < len(args)- 1; i++{	 
-			F.Println()
-		}
+if U.IsOnly(args){
+	for i:= 0 ;i < len(args)- 1; i++{	 
+		F.Println()
+	}
 		return
 	}	
 		for _, V := range args {		

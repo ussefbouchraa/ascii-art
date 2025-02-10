@@ -20,3 +20,13 @@ func IsValidArg(arg string) bool{
 	}
 	return true
 }
+
+
+func IsOnly(arg []string) bool {
+	for _,val := range arg{
+		if string(val) != "" {
+			return false
+		}
+	}
+	return true 
+}
