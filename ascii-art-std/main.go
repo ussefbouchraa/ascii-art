@@ -5,6 +5,7 @@ import (
 	F "fmt"
 	"os"
 	S "strings"
+
 	U "asciiArt/utils"
 )
 
@@ -29,25 +30,28 @@ func InitMap() {
 	defer file.Close()
 }
 
-
 func Printing(arg string) {
 	if arg == "\\n" {
 		F.Println()
 		return
 	}
+	args := S.Split(arg, "\\n")
 
-args:=  S.Split(arg, "\\n")
-if U.IsOnly(args){
-	for i:= 0 ;i < len(args)- 1; i++{	 
-		F.Println()
-	}
+	if U.Isonlynewline(args) {
+
+		for i := 0; i < len(args)-1; i++ {
+			F.Println()
+		}
+
 		return
-	}	
-		for _, V := range args {		
-			if V == "" {
-				F.Println()
-				continue
-			}
+
+	}
+
+	for _, V := range args {
+		if V == "" {
+			F.Println()
+			continue
+		}
 
 		for _, val := range V {
 			for i := 0; i < 8; i++ {
