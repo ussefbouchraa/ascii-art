@@ -29,17 +29,34 @@ func InitMap() {
 	defer file.Close()
 }
 
+
+func isOnly(arg []string) bool {
+	for _,val := range arg{
+		if string(val) != "" {
+			return false
+		}
+	}
+	return true 
+}
 func Printing(arg string) {
 	if arg == "\\n" {
 		F.Println()
 		return
 	}
 
-	for _, V := range S.Split(arg, "\\n") {
-		if V == "" {
+args:=  S.Split(arg, "\\n")
+	
+if isOnly(args) && len(args) > 1{
+		for i:= 0 ;i < len(args)- 1; i++{	 
 			F.Println()
-			continue
 		}
+		return
+	}	
+		for _, V := range args {		
+			if V == "" {
+				F.Println()
+				continue
+			}
 
 		for _, val := range V {
 			for i := 0; i < 8; i++ {
