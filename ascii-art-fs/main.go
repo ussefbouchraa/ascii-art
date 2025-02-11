@@ -19,6 +19,7 @@ func InitMap(banner string) {
 	var err error
 
 	switch banner {
+		
 	case "standard", "standard.txt":
 		file, err = os.Open("Banners/standard.txt")
 	case "shadow", "shadow.txt":
@@ -26,7 +27,7 @@ func InitMap(banner string) {
 	case "thinkertoy", "thinkertoy.txt":
 		file, err = os.Open("Banners/thinkertoy.txt")
 	default:
-		os.Stderr.WriteString("Err: Invalid argument [BANNER]: " + banner + "\n")
+		os.Stderr.WriteString("Err: Invalid Argument [BANNER]: " + banner + "\n")
 		os.Exit(0)
 	}
 
