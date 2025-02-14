@@ -10,15 +10,18 @@ import (
 )
 
 var (
-	_map  = make(map[int][8]string)
+	asciiMap  = make(map[int][8]string)
 	lines = [8]string{}
+	colorMap = map[string]string{
+        "red":     "\033[31m",
+        "green":   "\033[32m",
+        "yellow":  "\033[33m",
+        "blue":    "\033[34m",
+        "magenta": "\033[35m",
+        "white":   "\033[37m",
+        "reset":   "\033[0m",
+    }
 )
-
-const  (
-	red = "\033[31m"
-	reset = "\033[0m"
-)
-
 
 
 func InitMap(banner string) {
@@ -51,47 +54,11 @@ func InitMap(banner string) {
 	}
 	// insert data on the map
 	for i := 32; i < 127; i++ {
-		_map[i] = A.InsertValue(scanner)
+		asciiMap[i] = A.InsertValue(scanner)
 	}
 
 	defer file.Close()
 }
-
-// func Printing(inp string) {
-// 	if inp == "\\n" {
-// 		F.Println()
-// 		return
-// 	}
-
-// 	SplArgs := S.Split(inp, "\\n")
-
-// 	// Fix Multiple "\n"
-// 	if A.IsOnlyNewLine(SplArgs) {
-// 		for i := 0; i < len(SplArgs)-1; i++ {
-// 			F.Println()
-// 		}
-// 		return
-// 	}
-// 	// applying "\n"
-// 	for _, arg := range SplArgs {
-// 		if arg == "" {
-// 			F.Println()
-// 			continue
-// 		}
-// 		// Storing Data
-// 		for _, val := range arg {
-// 			for i := 0; i < 8; i++ {
-// 				lines[i] += _map[int(val)][i]
-// 			}
-// 		}
-// 		// Printing Data
-// 		for i := 0; i < 8; i++ {
-// 			F.Println(lines[i])
-// 			lines[i] = ""
-// 		}
-// 	}
-// }
-
 
 
 func Printing(str, color, sub string) {
@@ -103,13 +70,13 @@ func Printing(str, color, sub string) {
 			if arg == ""{
 				for _,v:= range sub{
 					for i:=0 ; i<8 ; i++{
-						lines[i] += red + _map[int(v)][i] + reset 
+						lines[i] += colorMap[color]+ asciiMap[int(v)][i] + colorMap["reset"] 
 					}
 				}
 			}else{
 				for _,v:= range arg{
 					for i:=0 ; i<8 ; i++{
-						lines[i] += _map[int(v)][i] 
+						lines[i] += asciiMap[int(v)][i] 
 					}
 				}
 			}
@@ -125,25 +92,35 @@ func Printing(str, color, sub string) {
 func main() {
 	args := os.Args[1:]
 
+
+if len(args) == 1 || len(args) == 2{
+	if len(args) == 1{	args = append(args, "standard")}
+	if !A.IsValidArgs(args[0], "") {
+		os.Stderr.WriteString("Err: Invalid Arguments [STRING]!\n")
+		return
+	}
+	InitMap(args[1])
+	Printing( args[0], "", "") 
+	return
+}
+
 	if (len(args) < 3 || len(args) > 4 ) {
-		os.Stderr.WriteString("Usage: go run . --color=<color> <substring to be colored> [STRING]")
+		os.Stderr.WriteString("Usage: go run . --color=<color> <substring to be colored> [STRING]\n")
 		return
 	}
 
 	if len(args) == 3 { args = append(args, "standard")}
 	
 	if !A.IsValidColor(args[0]){
-		os.Stderr.WriteString("Err: Invalid Color\n")
+		os.Stderr.WriteString("Usage: go run . --color=<color> <substring to be colored> [STRING]\n")
 		return
 	}
-	color := S.TrimPrefix(args[0], "--color=")
 
 	if !A.IsValidArgs(args[2], args[1]) {
-				os.Stderr.WriteString("Err: Invalid Arguments !\n")
+			os.Stderr.WriteString("Err: Invalid Arguments [STRING] [SUB] \n")
 		return
 	}
 
-	F.Println(color,"----", args[2],"----",args[1])
-	InitMap(args[3]) 
-	Printing( args[2], color, args[1])
+	InitMap(args[3])  //banner
+	Printing( args[2], args[0][8:], args[1]) // string  || color || sub 
 }
