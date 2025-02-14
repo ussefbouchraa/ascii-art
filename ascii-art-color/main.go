@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"os"
-
 	A "asciiartcolor/utils"
 	F "fmt"
 	S "strings"
@@ -23,6 +22,12 @@ var (
     }
 )
 
+func printlines(){
+	for i:=0 ; i < 8 ; i++{
+		F.Println(lines[i])
+		lines[i] = ""
+	}
+}
 
 func InitMap(banner string) {
 	var file *os.File
@@ -62,33 +67,39 @@ func InitMap(banner string) {
 
 
 func Printing(str, color, sub string) {
+	if str == "\\n" { F.Println(); return }
 
-	spl := S.Split(str, sub);
-	F.Println(spl)
-	
-	for _,arg := range spl{
-			if arg == ""{
-				for _,v:= range sub{
-					for i:=0 ; i<8 ; i++{
-						lines[i] += colorMap[color]+ asciiMap[int(v)][i] + colorMap["reset"] 
-					}
+	SplArgs := S.Split(str, "\\n")
+	if A.IsOnlyNewLine(SplArgs) {
+		for i := 0; i < len(SplArgs)-1; i++ {
+			F.Println()
+		}
+		return
+	}
+	for _,args := range SplArgs{
+		if args == "" {F.Println(); continue}
+
+	args = S.Replace(args, sub, "\x00", -1)
+	for _,arg := range args{
+		if string(arg) == "\x00"{
+			for _,v:= range sub{
+				for i:=0 ; i<8 ; i++{
+					lines[i] += colorMap[color]+ asciiMap[int(v)][i] + colorMap["reset"] 
 				}
-			}else{
-				for _,v:= range arg{
-					for i:=0 ; i<8 ; i++{
-						lines[i] += asciiMap[int(v)][i] 
-					}
+			}
+		}else{
+			for _,v:= range string(arg){
+				for i:=0 ; i<8 ; i++{
+					lines[i] += asciiMap[int(v)][i] 
 				}
 			}
 		}
-		for i:=0 ; i<8 ; i++{
-			F.Println(lines[i])
-			}
 	}
+		printlines()
+}
+}
 	
 	
-
-
 func main() {
 	args := os.Args[1:]
 

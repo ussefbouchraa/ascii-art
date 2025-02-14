@@ -39,7 +39,6 @@ func IsOnlyNewLine(str []string) bool {
 }
 
 
-
 func IsValidColor(color string)bool{
 
 	if color == "" {
@@ -56,3 +55,4 @@ func IsValidColor(color string)bool{
 	}
 return true
 }
+
